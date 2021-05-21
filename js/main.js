@@ -1,98 +1,74 @@
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext('2d')
-canvas.width = window.screen.width
-canvas.height = window.screen.height
-var x = canvas.width / 2;
-var y = canvas.height / 2;
-r = 50;
-var dx = 10;
-var dy = -10;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-function rect() {
+//classes allow you to easily build the same object over and over
+class Circle {
+  constructor(x, y, r) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.color = "lightgrey"; //if you wanted to add a fillStyle
+    this.dx = 0;
+    this.dy = 0;
+  }
+  //draws the object
+  draw() {
     ctx.beginPath();
-    ctx.rect(600, 400, 50, 50)
+    ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
     ctx.stroke();
+    ctx.closePath();
+  }
+  //updates anything related to the object
+  update() {
+    //increasingly adds 0.5 to the dy or dx
+    if (controller1.up) {this.dy -= 0.5}; 
+    if (controller1.right) {this.dx += 0.5};
+    if (controller1.down) {this.dy += 0.5};
+    if (controller1.left) {this.dx -= 0.5};
+    //if dy or dx is being added to so will the x and y. If not then they are 0.
+    this.x += this.dx;  
+    this.y += this.dy;
+    //Multiplying by a number less then 1 will prevent the object from gaining infinite speed and also cause the object to stop. Can be changed to anything below 1. This will also change how rigidly the circle comes to a stop. it can slide or absuplty stop.
+    this.dx *= 0.9;
+    this.dy *= 0.9;
+    //calling the draw() in here so I don't have to call it in the animate loop. Either way works.
+    this.draw(); 
+  }
 }
 
-window.onkeypress = function(e) {
-
-
-    console.log(e.keyCode)
-
-    if (e.keyCode == 119) {
-        keyW()
-        rect()
-    } else if (e.keyCode == 97) {
-        keyA()
-        rect()
-    } else if (e.keyCode == 115) {
-        keyS()
-        rect()
-    } else if (e.keyCode == 100) {
-        keyD()
-        rect()
+class Controller {
+  constructor() {
+    this.up = false;
+    this.right = false;
+    this.down = false;
+    this.left = false;
+    
+    let keyEvent = (e) => {
+      //if the condition is true it will set up/down/left/right to the true or false. e.type will either be 'keyup' or 'keydown'.
+      if (e.code == "KeyW" || e.code == "ArrowUp") {this.up = e.type == 'keydown'};
+      if (e.code == "KeyD" || e.code == "ArrowRight") {this.right = e.type == 'keydown'};
+      if (e.code == "KeyS" || e.code == "ArrowDown") {this.down = e.type == 'keydown'};
+      if (e.code == "KeyA" || e.code == "ArrowLeft") {this.left = e.type == 'keydown'};
+      
+    }
+    addEventListener('keydown', keyEvent);
+    addEventListener('keyup', keyEvent);
     }
 }
 
-function keyWDraw() {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-}
+//Create instances of you classes
+let circle1 = new Circle(canvas.width/2, canvas.height/2, 50, 0, Math.PI*2);
+//can add more circles if you want
+//let circle2 = new Circle(100, 100, 20, 0, Math.Pi*2);
+let controller1 = new Controller();
 
-function keyW() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    keyWDraw();
-    y += dy;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  circle1.update();
+  //can add circle2.draw() if you want the other circle to be staionary. 
+  //circle2.draw();
+  requestAnimationFrame(animate)
 }
-
-function keyADraw() {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-}
-
-function keyA() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    keyADraw();
-    x -= dx;
-}
-
-function keySDraw() {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-}
-
-function keyS() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    keySDraw();
-    y -= dy;
-}
-
-function keyDDraw() {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-}
-
-function keyD() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    keyDDraw();
-    x -= dy;
-}
-
-window.onload = function() {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
-
-    ctx.beginPath();
-    ctx.rect(600, 400, 50, 50)
-    ctx.stroke();
-}
+animate();
