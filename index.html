@@ -5,7 +5,13 @@
   <link rel="stylesheet" href="css/styles.css">
   <title>Circle</title>
  </head>
-   <canvas id="canvas"></canvas>
+ <div id="inputElement">
+   <input required minlength="1" maxlength="15" id="inputArea"></input>
+   <br><br>
+   <button onclick="enterGameTest()">Enter Game</button>
+ </div>
+   <canvas id="canvas" style="display:none">
+   </canvas>
   <script src="js/main.js"></script>
- </body>
+</body>
 </html>
