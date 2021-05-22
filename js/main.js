@@ -17,6 +17,9 @@ class Circle {
   }
 
   draw() {
+
+
+
     if (this.x <= 60) {
       this.x = 60
     } else if (this.x >= x2) {
@@ -28,6 +31,29 @@ class Circle {
     } else if (this.y >= y2) {
       this.y = y2
     }
+
+    
+    ctx.beginPath();
+    ctx.rect(this.x+33, this.y-55, 18, 170);
+    ctx.fillStyle='#964B00';
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.arc(this.x+40, this.y-30, this.r-30, 0, 2 * Math.PI)
+    ctx.fillStyle='#964B00';
+    ctx.fill();
+    ctx.stroke()
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.arc(this.x+40, this.y+30, this.r-30, 0, 2 * Math.PI)
+    ctx.fillStyle='#964B00';
+    ctx.fill();
+    ctx.stroke()
+    ctx.closePath();
+
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
     ctx.fillStyle='#964B00';
@@ -73,8 +99,10 @@ class Controller {
     }
     addEventListener('keydown', keyEvent);
     addEventListener('keyup', keyEvent);
+    addEventListener('mousemove', keyEvent)
     }
 }
+
 
 let circle1 = new Circle(canvas.width/2, canvas.height/2, 50, 0, Math.PI*2);
 let controller1 = new Controller();
@@ -85,5 +113,9 @@ function animate() {
   requestAnimationFrame(animate)
 }
 
-
 animate();
+
+
+
+
+
