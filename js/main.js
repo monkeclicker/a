@@ -3,6 +3,10 @@ var ctx = canvas.getContext('2d')
 var enterGame = document.getElementById('enterGame')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
+window.addEventListener("resize", function(){
+  canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+});
 var x2 = canvas.width-60
 var y2 = canvas.height-60
 console.log(canvas.width, canvas.height)
